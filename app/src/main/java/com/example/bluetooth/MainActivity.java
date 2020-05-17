@@ -2,7 +2,6 @@ package com.example.bluetooth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         connect_to_esp.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
+
             @Override
             public void onClick(View v) {
                 if(adapter.isEnabled()){
@@ -67,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         try {
-                            assert socket != null;
                             socket.connect();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -82,23 +80,31 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+
+                        if (socket.isConnected()) {
+                            Toast.makeText(getApplicationContext(), "Połączono z ESP",
+                                    Toast.LENGTH_LONG).show();
+                            try {
+                                run();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "Nie połączono z ESP",
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }
+
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Bluetooth jest wyłączony",
                             Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(getApplicationContext(), "Połączono z ESP",
-                        Toast.LENGTH_LONG).show();
-                try {
-                    run();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
             }
         });
     }
-
 
     public void run() throws IOException {
         outputStream.write('2');
