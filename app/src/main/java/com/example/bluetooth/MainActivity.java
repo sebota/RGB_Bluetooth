@@ -13,22 +13,19 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
 
+public class MainActivity extends AppCompatActivity {
     Button connect_to_esp;
     BluetoothAdapter adapter;
-    public OutputStream outputStream;
-    public InputStream inStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final GlobalClass global = ((GlobalClass)getApplicationContext());
         connect_to_esp = findViewById(R.id.display_devices_button);
         adapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -71,12 +68,12 @@ public class MainActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         try {
-                            outputStream = socket.getOutputStream();
+                            global.setOutputStream(socket.getOutputStream());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         try {
-                            inStream = socket.getInputStream();
+                            global.setInStream(socket.getInputStream());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -107,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void run() throws IOException {
-        outputStream.write('2');
+        Intent intent = new Intent(this, SendActivity.class);
+        startActivity(intent);
     }
-
 }
 
