@@ -6,8 +6,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class SendActivity extends AppCompatActivity {
+    ImageView rgb_image;
+    View rgb_view;
+    SeekBar rgb_seekbar;
+    int r=0, g=0, b=0, intensity=100;
+    @SuppressLint("ClickableViewAccessibility")
 
 
     @Override
@@ -16,15 +31,56 @@ public class SendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_send);
 
         final GlobalClass global = ((GlobalClass)getApplicationContext());
-
         OutputStream send = global.getOutputStream();
 
-        try {
-            send.write('2'); //test
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        rgb_image=findViewById(R.id.rgb_image);
+        rgb_view=findViewById(R.id.rgb_view);
+        rgb_seekbar=findViewById(R.id.rgb_seekBar);
+        rgb_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                intensity=progress;
+                float r_temp=(float)r*(float)intensity/100;
+                float g_temp=(float)g*(float)intensity/100;
+                float b_temp=(float)b*(float)intensity/100;
+                rgb_view.setBackgroundColor(Color.rgb((int)r_temp, (int)g_temp, (int)b_temp));
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        final Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.colors);
+        rgb_image.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE){
+                    int x_pos=(int)event.getX();
+                    int y_pos=(int)event.getY();
+                    if (y_pos>=0 && y_pos<bitmap.getHeight() && x_pos>=0 && x_pos<bitmap.getWidth())
+                    {
+                        int pixel = bitmap.getPixel(x_pos, y_pos);
+
+                        int r_test = Color.red(pixel);
+                        int g_test = Color.green(pixel);
+                        int b_test = Color.blue(pixel);
+                        if (r_test>0 || g_test>0 || b_test>0){
+                            r=r_test;
+                            g=g_test;
+                            b=b_test;
+                            float r_temp=(float)r*(float)intensity/100;
+                            float g_temp=(float)g*(float)intensity/100;
+                            float b_temp=(float)b*(float)intensity/100;
+                            rgb_view.setBackgroundColor(Color.rgb((int)r_temp, (int)g_temp, (int)b_temp));
+                        }
+                    }
+                }
+                return true;
+            }
+        });
     }
 }
