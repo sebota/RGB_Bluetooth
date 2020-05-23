@@ -13,16 +13,23 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class SendActivity extends AppCompatActivity {
     ImageView rgb_image;
     View rgb_view;
     SeekBar rgb_seekbar;
+    Button save_button;
+    Switch pulse_switch;
+    Switch cyclic_switch;
     int r=0, g=0, b=0, intensity=100;
     @SuppressLint("ClickableViewAccessibility")
+
 
 
     @Override
@@ -31,11 +38,15 @@ public class SendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_send);
 
         final GlobalClass global = ((GlobalClass)getApplicationContext());
-        OutputStream send = global.getOutputStream();
+        final OutputStream send = global.getOutputStream();
 
         rgb_image=findViewById(R.id.rgb_image);
         rgb_view=findViewById(R.id.rgb_view);
         rgb_seekbar=findViewById(R.id.rgb_seekBar);
+        save_button=findViewById(R.id.button_save);
+        pulse_switch=findViewById(R.id.switch_pulse);
+        cyclic_switch=findViewById(R.id.switch_cyclic);
+
         rgb_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -44,6 +55,12 @@ public class SendActivity extends AppCompatActivity {
                 float g_temp=(float)g*(float)intensity/100;
                 float b_temp=(float)b*(float)intensity/100;
                 rgb_view.setBackgroundColor(Color.rgb((int)r_temp, (int)g_temp, (int)b_temp));
+                String hex = String.format("#COLOR%02X%02X%02X", (int)r_temp, (int)g_temp, (int)b_temp);
+                try {
+                    send.write(hex.getBytes("UTF-8"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -52,6 +69,64 @@ public class SendActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        save_button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                String hex = "#SAVED";
+                try {
+                    send.write(hex.getBytes("UTF-8"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        pulse_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton cb, boolean on){
+                if(on)
+                {
+                    String hex = "#PULSEON";
+                    try {
+                        send.write(hex.getBytes("UTF-8"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                {
+                    String hex = "#PULSEOF";
+                    try {
+                        send.write(hex.getBytes("UTF-8"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        cyclic_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton cb, boolean on){
+                if(on)
+                {
+                    String hex = "#CYCLION";
+                    try {
+                        send.write(hex.getBytes("UTF-8"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                {
+                    String hex = "#CYCLIOF";
+                    try {
+                        send.write(hex.getBytes("UTF-8"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
         final Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.colors);
@@ -76,6 +151,12 @@ public class SendActivity extends AppCompatActivity {
                             float g_temp=(float)g*(float)intensity/100;
                             float b_temp=(float)b*(float)intensity/100;
                             rgb_view.setBackgroundColor(Color.rgb((int)r_temp, (int)g_temp, (int)b_temp));
+                            String hex = String.format("#COLOR%02X%02X%02X", (int)r_temp, (int)g_temp, (int)b_temp);
+                            try {
+                                send.write(hex.getBytes("UTF-8"));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -84,3 +165,4 @@ public class SendActivity extends AppCompatActivity {
         });
     }
 }
+
