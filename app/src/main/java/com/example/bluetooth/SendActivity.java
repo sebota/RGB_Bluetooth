@@ -24,9 +24,9 @@ public class SendActivity extends AppCompatActivity {
     ImageView rgb_image;
     View rgb_view;
     SeekBar rgb_seekbar;
-    Button save_button;
     Switch pulse_switch;
     Switch cyclic_switch;
+    Switch random_switch;
     int r=0, g=0, b=0, intensity=100;
     @SuppressLint("ClickableViewAccessibility")
 
@@ -43,7 +43,7 @@ public class SendActivity extends AppCompatActivity {
         rgb_image=findViewById(R.id.rgb_image);
         rgb_view=findViewById(R.id.rgb_view);
         rgb_seekbar=findViewById(R.id.rgb_seekBar);
-        save_button=findViewById(R.id.button_save);
+        random_switch=findViewById(R.id.switch_random);
         pulse_switch=findViewById(R.id.switch_pulse);
         cyclic_switch=findViewById(R.id.switch_cyclic);
 
@@ -71,18 +71,6 @@ public class SendActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-        save_button.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                String hex = "#SAVED";
-                try {
-                    send.write(hex.getBytes("UTF-8"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
         pulse_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton cb, boolean on){
@@ -98,6 +86,29 @@ public class SendActivity extends AppCompatActivity {
                 else
                 {
                     String hex = "#PULSEOF";
+                    try {
+                        send.write(hex.getBytes("UTF-8"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        random_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton cb, boolean on){
+                if(on)
+                {
+                    String hex = "#RNDCLRON";
+                    try {
+                        send.write(hex.getBytes("UTF-8"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                {
+                    String hex = "#RNDCLROF";
                     try {
                         send.write(hex.getBytes("UTF-8"));
                     } catch (IOException e) {

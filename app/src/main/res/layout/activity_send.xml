@@ -8,6 +8,20 @@
 
     tools:context=".SendActivity">
 
+    <Switch
+        android:id="@+id/switch_random"
+        android:layout_width="230dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="12dp"
+        android:background="#303030"
+        android:text="Random mode: "
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_pulse" />
+
     <ImageView
         android:id="@+id/rgb_image"
         android:layout_width="wrap_content"
@@ -51,38 +65,29 @@
 
     <Switch
         android:id="@+id/switch_cyclic"
-        android:layout_width="wrap_content"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="#303030"
         android:text="Cyclic mode: "
         android:textColor="#FFFFFF"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rgb_view" />
 
     <Switch
         android:id="@+id/switch_pulse"
-        android:layout_width="185dp"
+        android:layout_width="230dp"
         android:layout_height="31dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
         android:background="#303030"
         android:text="Pulse mode: "
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rgb_view" />
-
-    <Button
-        android:id="@+id/button_save"
-        android:layout_width="123dp"
-        android:layout_height="66dp"
-        android:text="Save"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_cyclic" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
