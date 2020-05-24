@@ -56,6 +56,9 @@ public class SendActivity extends AppCompatActivity {
                 float b_temp=(float)b*(float)intensity/100;
                 rgb_view.setBackgroundColor(Color.rgb((int)r_temp, (int)g_temp, (int)b_temp));
                 String hex = String.format("#COLOR%02X%02X%02X", (int)r_temp, (int)g_temp, (int)b_temp);
+                cyclic_switch.setChecked(false);
+                random_switch.setChecked(false);
+                pulse_switch.setChecked(false);
                 try {
                     send.write(hex.getBytes("UTF-8"));
                 } catch (IOException e) {
@@ -76,6 +79,8 @@ public class SendActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton cb, boolean on){
                 if(on)
                 {
+                    cyclic_switch.setChecked(false);
+                    random_switch.setChecked(false);
                     String hex = "#PULSEON";
                     try {
                         send.write(hex.getBytes("UTF-8"));
@@ -99,6 +104,8 @@ public class SendActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton cb, boolean on){
                 if(on)
                 {
+                    cyclic_switch.setChecked(false);
+                    pulse_switch.setChecked(false);
                     String hex = "#RNDCLRON";
                     try {
                         send.write(hex.getBytes("UTF-8"));
@@ -122,6 +129,8 @@ public class SendActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton cb, boolean on){
                 if(on)
                 {
+                    pulse_switch.setChecked(false);
+                    random_switch.setChecked(false);
                     String hex = "#CYCLION";
                     try {
                         send.write(hex.getBytes("UTF-8"));
@@ -163,6 +172,9 @@ public class SendActivity extends AppCompatActivity {
                             float b_temp=(float)b*(float)intensity/100;
                             rgb_view.setBackgroundColor(Color.rgb((int)r_temp, (int)g_temp, (int)b_temp));
                             String hex = String.format("#COLOR%02X%02X%02X", (int)r_temp, (int)g_temp, (int)b_temp);
+                            cyclic_switch.setChecked(false);
+                            random_switch.setChecked(false);
+                            pulse_switch.setChecked(false);
                             try {
                                 send.write(hex.getBytes("UTF-8"));
                             } catch (IOException e) {
