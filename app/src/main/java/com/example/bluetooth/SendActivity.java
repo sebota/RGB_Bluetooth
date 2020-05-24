@@ -55,7 +55,7 @@ public class SendActivity extends AppCompatActivity {
                 float g_temp=(float)g*(float)intensity/100;
                 float b_temp=(float)b*(float)intensity/100;
                 rgb_view.setBackgroundColor(Color.rgb((int)r_temp, (int)g_temp, (int)b_temp));
-                String hex = String.format("#COLOR%02X%02X%02X", (int)r_temp, (int)g_temp, (int)b_temp);
+                String hex = String.format("#COLOR%02X%02X%02X\n", (int)r_temp, (int)g_temp, (int)b_temp);
                 cyclic_switch.setChecked(false);
                 random_switch.setChecked(false);
                 pulse_switch.setChecked(false);
@@ -81,7 +81,7 @@ public class SendActivity extends AppCompatActivity {
                 {
                     cyclic_switch.setChecked(false);
                     random_switch.setChecked(false);
-                    String hex = "#PULSEON";
+                    String hex = "#PULSEON\n";
                     try {
                         send.write(hex.getBytes("UTF-8"));
                     } catch (IOException e) {
@@ -90,7 +90,7 @@ public class SendActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    String hex = "#PULSEOF";
+                    String hex = "#PULSEOF\n";
                     try {
                         send.write(hex.getBytes("UTF-8"));
                     } catch (IOException e) {
@@ -106,7 +106,7 @@ public class SendActivity extends AppCompatActivity {
                 {
                     cyclic_switch.setChecked(false);
                     pulse_switch.setChecked(false);
-                    String hex = "#RNDCLRON";
+                    String hex = "#RNDCLRON\n";
                     try {
                         send.write(hex.getBytes("UTF-8"));
                     } catch (IOException e) {
@@ -115,7 +115,7 @@ public class SendActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    String hex = "#RNDCLROF";
+                    String hex = "#RNDCLROF\n";
                     try {
                         send.write(hex.getBytes("UTF-8"));
                     } catch (IOException e) {
@@ -131,7 +131,7 @@ public class SendActivity extends AppCompatActivity {
                 {
                     pulse_switch.setChecked(false);
                     random_switch.setChecked(false);
-                    String hex = "#CYCLION";
+                    String hex = "#CYCLION\n";
                     try {
                         send.write(hex.getBytes("UTF-8"));
                     } catch (IOException e) {
@@ -140,7 +140,7 @@ public class SendActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    String hex = "#CYCLIOF";
+                    String hex = "#CYCLIOF\n";
                     try {
                         send.write(hex.getBytes("UTF-8"));
                     } catch (IOException e) {
@@ -171,7 +171,7 @@ public class SendActivity extends AppCompatActivity {
                             float g_temp=(float)g*(float)intensity/100;
                             float b_temp=(float)b*(float)intensity/100;
                             rgb_view.setBackgroundColor(Color.rgb((int)r_temp, (int)g_temp, (int)b_temp));
-                            String hex = String.format("#COLOR%02X%02X%02X", (int)r_temp, (int)g_temp, (int)b_temp);
+                            String hex = String.format("#COLOR%02X%02X%02X\n", (int)r_temp, (int)g_temp, (int)b_temp);
                             cyclic_switch.setChecked(false);
                             random_switch.setChecked(false);
                             pulse_switch.setChecked(false);
