@@ -29,14 +29,12 @@ int map_blue_value_c = 0;
 
 float intensity = 0;
 
+unsigned long last_time = 0;
+unsigned long current_time = 0;
+
 bool pulse_flag = false;
 bool rand_flag = false;
 bool cyclic_flag = false;
-
-
-//int red_tab[] = {0, 255, 255, 255, 0 , 0};
-//int green_tab[] = {0, 0, 0, 255, 255, 255};
-//int blue_tab[] = {255, 255, 0, 0, 0, 255};
 
 int *rgb[] = {&green_value_c, &red_value_c, &blue_value_c};
 bool sign = true;
@@ -52,7 +50,6 @@ void setup() {
   
   Serial.begin(115200);
   SerialBT.begin("RGB Control");
-  //Serial.println("The device started, now you can pair it with bluetooth!");
   
   ledcSetup(ledChannel_red, freq, resolution);
   ledcSetup(ledChannel_green, freq, resolution);
@@ -70,67 +67,78 @@ void setup() {
 void loop() {
 
   if (SerialBT.available()) {
-    data = SerialBT.readString();
+    data = SerialBT.readStringUntil('\n');
     Serial.println(data);
     check_data();
   }
   
   if(cyclic_flag){
-    multicolor(*rgb[idx]);
-
-    map_red_value_c = map(red_value_c, 0, 255, 255, 0);
-    map_green_value_c = map(green_value_c, 0, 255, 255, 0);
-    map_blue_value_c = map(blue_value_c, 0, 255, 255, 0);
+    current_time= millis();
+    if (current_time- last_time > 20)
+    { 
+      last_time= current_time;
     
-    ledcWrite(ledChannel_red, map_red_value_c);
-    ledcWrite(ledChannel_green, map_green_value_c);
-    ledcWrite(ledChannel_blue, map_blue_value_c);
-    delay(20);
+      multicolor(*rgb[idx]);
+  
+      map_red_value_c = map(red_value_c, 0, 255, 255, 0);
+      map_green_value_c = map(green_value_c, 0, 255, 255, 0);
+      map_blue_value_c = map(blue_value_c, 0, 255, 255, 0);
+      
+      ledcWrite(ledChannel_red, map_red_value_c);
+      ledcWrite(ledChannel_green, map_green_value_c);
+      ledcWrite(ledChannel_blue, map_blue_value_c);
+    }
   }
 
   if(pulse_flag){
-    red_value_p = map(red_value, 255, 0, 0, 255);
-    green_value_p = map(green_value, 255, 0, 0, 255);
-    blue_value_p = map(blue_value, 255, 0, 0, 255);
+    current_time= millis();
+    if (current_time- last_time > 20)
+    { 
+      last_time= current_time;
 
-    red_value_p *= intensity;
-    green_value_p *= intensity;
-    blue_value_p *= intensity;
-
-    red_value_p = map(red_value_p, 0, 255, 255, 0);
-    green_value_p = map(green_value_p, 0, 255, 255, 0);
-    blue_value_p = map(blue_value_p, 0, 255, 255, 0);
-    
-    ledcWrite(ledChannel_red, red_value_p);
-    ledcWrite(ledChannel_green, green_value_p);
-    ledcWrite(ledChannel_blue, blue_value_p);
-    delay(20); 
-    intensity += 0.006; 
-    
-    if(intensity >= 1)
-      intensity = 0; 
+      red_value_p = map(red_value, 255, 0, 0, 255);
+      green_value_p = map(green_value, 255, 0, 0, 255);
+      blue_value_p = map(blue_value, 255, 0, 0, 255);
+  
+      red_value_p *= intensity;
+      green_value_p *= intensity;
+      blue_value_p *= intensity;
+  
+      red_value_p = map(red_value_p, 0, 255, 255, 0);
+      green_value_p = map(green_value_p, 0, 255, 255, 0);
+      blue_value_p = map(blue_value_p, 0, 255, 255, 0);
+      
+      ledcWrite(ledChannel_red, red_value_p);
+      ledcWrite(ledChannel_green, green_value_p);
+      ledcWrite(ledChannel_blue, blue_value_p);
+  
+      intensity += 0.006; 
+      
+      if(intensity >= 1)
+        intensity = 0; 
+    }
   }
 
   if(rand_flag){
-    ledcWrite(ledChannel_red, random(256));
-    ledcWrite(ledChannel_green, random(256));
-    ledcWrite(ledChannel_blue, random(256));
+    current_time = millis();
+    if (current_time - last_time > 700)
+    { 
+      last_time = current_time;
+
+      ledcWrite(ledChannel_red, random(256));
+      ledcWrite(ledChannel_green, random(256));
+      ledcWrite(ledChannel_blue, random(256));
+    }
     
-    for (int i = 0; i <= 70; i++){
-      delay(10);
+    if (SerialBT.available())
+      data = SerialBT.readStringUntil('\n');
       
-      if (SerialBT.available())
-        data = SerialBT.readString();
-        
-      if(data.substring(7, 9) == "OF"){
-        rand_flag = false;
-        ledcWrite(ledChannel_red, red_value);
-        ledcWrite(ledChannel_green, green_value);
-        ledcWrite(ledChannel_blue, blue_value); 
-      }
+    if(data.substring(7, 9) == "OF"){
+      rand_flag = false;
     }
   }
 }
+
 
 void multicolor(int &tmp)
 {
@@ -185,10 +193,6 @@ void check_data(){
           
     if(data.substring(6, 8) == "OF"){
       cyclic_flag = false;
-      
-      ledcWrite(ledChannel_red, red_value);
-      ledcWrite(ledChannel_green, green_value);
-      ledcWrite(ledChannel_blue, blue_value); 
     }
   }
   
@@ -199,9 +203,6 @@ void check_data(){
 
     if(data.substring(6, 8) == "OF"){
       pulse_flag = false;
-      ledcWrite(ledChannel_red, red_value);
-      ledcWrite(ledChannel_green, green_value);
-      ledcWrite(ledChannel_blue, blue_value);
     }     
   }
   
@@ -212,10 +213,6 @@ void check_data(){
 
     if(data.substring(7, 9) == "OF"){
       rand_flag = false;
-          
-      ledcWrite(ledChannel_red, red_value);
-      ledcWrite(ledChannel_green, green_value);
-      ledcWrite(ledChannel_blue, blue_value); 
     }
   }    
 }
