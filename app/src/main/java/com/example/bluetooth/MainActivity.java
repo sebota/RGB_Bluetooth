@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 //włączenie interfejsu
                 Intent BTintent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(BTintent, 1);
-                //obsługa interfejsu Bluetooth
             }
         } else {
             Toast.makeText(getApplicationContext(), "Brak interfejsu Bluetooth!",
@@ -81,11 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         if (socket.isConnected()) {
                             Toast.makeText(getApplicationContext(), "Połączono z ESP",
                                     Toast.LENGTH_LONG).show();
-                            try {
-                                run();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            run();
                         }
                         else{
                             Toast.makeText(getApplicationContext(), "Nie połączono z ESP",
@@ -103,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void run() throws IOException {
+    public void run() {
         Intent intent = new Intent(this, SendActivity.class);
         startActivity(intent);
     }
