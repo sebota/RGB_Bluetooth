@@ -1,2 +1,2 @@
 # RGB_Bluetooth
-W BT.ino jest kod z Arduino
+Aplikacja mobilna do kontrolowania oświetlenia RGB.
